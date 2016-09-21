@@ -43,7 +43,7 @@ local brightness = 13
 local officeLED = hs.milight.new("10.0.88.21")
 
 -- Defines for WiFi watcher
-local homeSSID = "chrul" -- My home WiFi SSID
+local homeSSID = "Huawei*" -- My home WiFi SSID
 local lastSSID = hs.wifi.currentNetwork()
 
 -- Defines for screen watcher
@@ -53,8 +53,8 @@ local lastNumberOfScreens = #hs.screen.allScreens()
 local shouldUnmuteOnScreenWake = nil
 
 -- Defines for window grid
-hs.grid.GRIDWIDTH = 8
-hs.grid.GRIDHEIGHT = 8
+hs.grid.GRIDWIDTH = 2
+hs.grid.GRIDHEIGHT = 2
 hs.grid.MARGINX = 0
 hs.grid.MARGINY = 0
 
@@ -69,9 +69,9 @@ local internal_display = {
     {"IRC",               nil,          display_imac, hs.layout.maximized, nil, nil},
     {"Reeder",            nil,          display_imac, hs.layout.left30,    nil, nil},
     {"Safari",            nil,          display_imac, hs.layout.maximized, nil, nil},
+    {"iTerm2",            nil,          display_imac, hs.layout.maximized, nil, nil},
     {"OmniFocus",         nil,          display_imac, hs.layout.maximized, nil, nil},
     {"Mail",              nil,          display_imac, hs.layout.maximized, nil, nil},
-    {"Microsoft Outlook", nil,          display_imac, hs.layout.maximized, nil, nil},
     {"HipChat",           nil,          display_imac, hs.layout.maximized, nil, nil},
     {"1Password",         nil,          display_imac, hs.layout.maximized, nil, nil},
     {"Calendar",          nil,          display_imac, hs.layout.maximized, nil, nil},
@@ -88,7 +88,6 @@ local dual_display = {
     {"OmniFocus",         "HP",         display_monitor, hs.geometry.unitrect(3/8, 0, 3/8, 0.5),   nil, nil},
     {"OmniFocus",         "Forecast",   display_monitor, hs.geometry.unitrect(3/8, 0.5, 3/8, 0.5),   nil, nil},
     {"Mail",              nil,          display_imac,    hs.geometry.unitrect(0, 0.5, 0.5, 0.5),   nil, nil},
-    {"Microsoft Outlook", nil,          display_imac,    hs.geometry.unitrect(0, 0, 0.5, 0.5),    nil, nil},
     {"HipChat",           nil,          display_monitor, hs.geometry.unitrect(0, 0, 3/8, 0.25), nil, nil},
     {"Messages",          nil,          display_monitor, hs.geometry.unitrect(0, 0.25, 3/8, 0.25), nil, nil},
 }
@@ -96,7 +95,7 @@ local dual_display = {
 -- Helper functions
 
 -- Replace Caffeine.app with 18 lines of Lua :D
-local caffeine = hs.menubar.new()
+-- local caffeine = hs.menubar.new()
 
 function setCaffeineDisplay(state)
     local result
@@ -381,13 +380,13 @@ function home_arrived()
     hs.task.new("/usr/bin/sudo", function() end, {"/usr/libexec/ApplicationFirewall/socketfilterfw", "--setblockall", "off"})
 
     -- Mount my mac mini's DAS
-    hs.applescript.applescript([[
-        tell application "Finder"
-            try
-                mount volume "smb://cmsj@servukipa._smb._tcp.local/Data"
-            end try
-        end tell
-    ]])
+    -- hs.applescript.applescript([[
+    --     tell application "Finder"
+    --         try
+    --             mount volume "smb://cmsj@servukipa._smb._tcp.local/Data"
+    --         end try
+    --     end tell
+    -- ]])
     triggerStatusletsUpdate()
     hs.notify.new({
           title='Hammerspoon',
@@ -399,11 +398,11 @@ end
 function home_departed()
     hs.audiodevice.defaultOutputDevice():setVolume(0)
     hs.task.new("/usr/bin/sudo", function() end, {"/usr/libexec/ApplicationFirewall/socketfilterfw", "--setblockall", "on"})
-    hs.applescript.applescript([[
-        tell application "Finder"
-            eject "Data"
-        end tell
-    ]])
+-- hs.applescript.applescript([[
+    --     tell application "Finder"
+    --         eject "Data"
+    --     end tell
+    -- ]])
     triggerStatusletsUpdate()
 
     hs.notify.new({
@@ -483,9 +482,9 @@ end
 
 -- Rather than switch to Safari, copy the current URL, switch back to the previous app and paste,
 -- This is a function that fetches the current URL from Safari and types it
-function typeCurrentSafariURL()
+function typeCurrentChromeURL()
     script = [[
-    tell application "Safari"
+    tell application "Google Chrome"
         set currentURL to URL of document 1
     end tell
 
@@ -593,16 +592,16 @@ end
 --hs.urlevent.bind('hyperfnright', function() hs.window.focusedWindow():moveOneScreenEast() end)
 
 -- Hotkeys to resize windows absolutely
-hs.hotkey.bind(hyper, 'a', function() hs.window.focusedWindow():moveToUnit(hs.layout.left30) end)
-hs.hotkey.bind(hyper, 's', function() hs.window.focusedWindow():moveToUnit(hs.layout.right70) end)
+--hs.hotkey.bind(hyper, 'a', function() hs.window.focusedWindow():moveToUnit(hs.layout.left30) end)
+--hs.hotkey.bind(hyper, 's', function() hs.window.focusedWindow():moveToUnit(hs.layout.right70) end)
 hs.hotkey.bind(hyper, '[', function() hs.window.focusedWindow():moveToUnit(hs.layout.left50) end)
 hs.hotkey.bind(hyper, ']', function() hs.window.focusedWindow():moveToUnit(hs.layout.right50) end)
 hs.hotkey.bind(hyper, 'f', toggle_window_maximized)
 hs.hotkey.bind(hyper, 'r', function() hs.window.focusedWindow():toggleFullScreen() end)
 
 -- Hotkeys to trigger defined layouts
-hs.hotkey.bind(hyper, '1', function() hs.layout.apply(internal_display) end)
-hs.hotkey.bind(hyper, '2', function() hs.layout.apply(dual_display) end)
+--hs.hotkey.bind(hyper, '1', function() hs.layout.apply(internal_display) end)
+--hs.hotkey.bind(hyper, '2', function() hs.layout.apply(dual_display) end)
 
 -- Hotkeys to interact with the window grid
 hs.hotkey.bind(hyper, 'g', hs.grid.show)
@@ -617,10 +616,11 @@ hs.urlevent.bind('hypershiftup', function() hs.grid.resizeWindowShorter(hs.windo
 hs.urlevent.bind('hypershiftdown', function() hs.grid.resizeWindowTaller(hs.window.focusedWindow()) end)
 
 -- Application hotkeys
-hs.hotkey.bind(hyper, 'e', function() toggle_application("iTerm") end)
-hs.hotkey.bind(hyper, 'q', function() toggle_application("Safari") end)
-hs.hotkey.bind(hyper, 'z', function() toggle_application("Reeder") end)
-hs.hotkey.bind(hyper, 'w', function() toggle_application("IRC") end)
+hs.hotkey.bind(hyper, '1', function() toggle_application("OmniFocus") end)
+hs.hotkey.bind(hyper, 'e', function() toggle_application("iTerm2") end)
+hs.hotkey.bind(hyper, 'c', function() toggle_application("Google Chrome") end)
+hs.hotkey.bind(hyper, 'm', function() toggle_application("Mail") end)
+hs.hotkey.bind(hyper, 'd', function() toggle_application("钉钉") end)
 
 -- Hotkeys to control the lighting in my office
 local officeBrightnessDown = function()
@@ -644,14 +644,14 @@ end)
 -- Misc hotkeys
 hs.hotkey.bind(hyper, 'y', hs.toggleConsole)
 hs.hotkey.bind(hyper, 'n', function() hs.task.new("/usr/bin/open", nil, {os.getenv("HOME")}):start() end)
-hs.hotkey.bind(hyper, 'c', caffeineClicked)
+-- hs.hotkey.bind(hyper, 'c', caffeineClicked)
 hs.hotkey.bind(hyper, 'Escape', toggle_audio_output)
-hs.hotkey.bind(hyper, 'm', function()
+hs.hotkey.bind(hyper, 'v', function()
     device = hs.audiodevice.defaultInputDevice()
     device:setMuted(not device:muted())
 end)
-hs.hotkey.bind(hyper, 'd', mouseHighlight)
-hs.hotkey.bind(hyper, 'u', typeCurrentSafariURL)
+--hs.hotkey.bind(hyper, 'd', mouseHighlight)
+hs.hotkey.bind(hyper, 'u', typeCurrentChromeURL)
 hs.hotkey.bind(hyper, '0', function()
     print(configFileWatcher)
     print(wifiWatcher)
@@ -718,4 +718,3 @@ collectgarbage("setpause", 1)
 
 --local wfRedshift=hs.window.filter.new({loginwindow={visible=true,allowRoles='*'}},'wf-redshift')
 --hs.redshift.start(2000,'20:00','7:00','3h',false,wfRedshift)
-
