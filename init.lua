@@ -621,6 +621,47 @@ hs.hotkey.bind(hyper, 'e', function() toggle_application("iTerm2") end)
 hs.hotkey.bind(hyper, 'c', function() toggle_application("Google Chrome") end)
 hs.hotkey.bind(hyper, 'm', function() toggle_application("Mail") end)
 hs.hotkey.bind(hyper, 'd', function() toggle_application("钉钉") end)
+hs.hotkey.bind(hyper, 'w', function() toggle_application("WeChat") end)
+hs.hotkey.bind(hyper, 'i', function() toggle_application("IntelliJ IDEA") end)
+
+
+local killWhiteList = {
+  "Mail",
+  "Google Chrome",
+  "OmniFocus",
+  "钉钉",
+  "WeChat",
+  "Evernote",
+  "iTerm2",
+  "Atom",
+  "IntelliJ IDEA"
+}
+
+function isInTable(value, tbl)
+  for k,v in ipairs(tbl) do
+    if v == value then
+      return true;
+    end
+  end
+
+  return false;
+end
+
+hs.hotkey.bind(hyper, "q", function()
+  hs.alert.show("Closing")
+  focusWindow = hs.window.focusedWindow()
+  for i, window in ipairs(hs.window.allWindows()) do
+    if not (focusWindow == window) then
+      local app = window:application()
+      if (app) then
+        if not isInTable(app:name(), killWhiteList) then
+          hs.alert.show(app:name())
+          app:kill()
+        end
+      end
+    end
+  end
+end)
 
 -- Hotkeys to control the lighting in my office
 local officeBrightnessDown = function()
