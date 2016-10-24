@@ -7,12 +7,13 @@ key2App = {
   c = 'Google Chrome',
   d = '钉钉',
   e = 'Evernote',
-  --f = 'Finder',
+  f = 'Finder',
   i = 'IntelliJ IDEA',
   m = 'Mail',
   o = 'OmniFocus',
   t = 'iTerm2',
-  w = 'WeChat'
+  w = 'WeChat',
+  x = 'XMind'
 }
 
 for key, app in pairs(key2App) do

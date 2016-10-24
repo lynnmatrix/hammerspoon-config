@@ -24,7 +24,7 @@ end
 --hs.hotkey.bind(hyper, 's', function() hs.window.focusedWindow():moveToUnit(hs.layout.right70) end)
 hs.hotkey.bind(hyper, '[', function() hs.window.focusedWindow():moveToUnit(hs.layout.left50) end)
 hs.hotkey.bind(hyper, ']', function() hs.window.focusedWindow():moveToUnit(hs.layout.right50) end)
-hs.hotkey.bind(hyper, 'f', toggle_window_maximized)
+hs.hotkey.bind(hyper, 'tab', toggle_window_maximized)
 hs.hotkey.bind(hyper, 'r', function() hs.window.focusedWindow():toggleFullScreen() end)
 
 -- Hotkeys to interact with the window grid
