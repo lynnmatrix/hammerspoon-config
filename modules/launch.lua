@@ -23,6 +23,29 @@ for key, app in pairs(key2App) do
     end)
 end
 
+local killWhiteList = {
+  "Mail",
+  "Google Chrome",
+  "OmniFocus",
+  "钉钉",
+  "WeChat",
+  "Evernote",
+  "iTerm2",
+  "Atom",
+  "IntelliJ IDEA"
+}
+
+function isInTable(value, tbl)
+  for k,v in ipairs(tbl) do
+
+    if v == value then
+      return true;
+    end
+  end
+
+  return false;
+end
+
 hs.hotkey.bind(hyper, "q", function()
     hs.alert.show("Closing")
     focusWindow = hs.window.focusedWindow()
@@ -69,26 +92,4 @@ function toggle_application(_app)
       -- nothing to do
     end
   end
-end
-
-local killWhiteList = {
-  "Mail",
-  "Google Chrome",
-  "OmniFocus",
-  "钉钉",
-  "WeChat",
-  "Evernote",
-  "iTerm2",
-  "Atom",
-  "IntelliJ IDEA"
-}
-
-function isInTable(value, tbl)
-  for k,v in ipairs(tbl) do
-    if v == value then
-      return true;
-    end
-  end
-
-  return false;
 end
