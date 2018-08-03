@@ -8,12 +8,14 @@ key2App = {
   d = '钉钉',
   e = 'Evernote',
   f = 'Finder',
-  i = 'IntelliJ IDEA',
+  j = 'IntelliJ IDEA',
   m = 'Mail',
   o = 'OmniFocus',
+  p = 'PyCharm',
   t = 'iTerm2',
   w = 'WeChat',
-  x = 'XMind'
+  x = 'XMind',
+  y = 'YoudaoDict'
 }
 
 for key, app in pairs(key2App) do

@@ -1,4 +1,6 @@
-local screen_switch_key = '.';
+local screen_switch_key = 's';
+local window = require 'hs.window'
+local fnutils = require 'hs.fnutils'
 
 ------------- Multiple Screen Focus Switch --------------- {{{
 
@@ -13,8 +15,8 @@ local function isInScreen(sc, win)
 end
 
 local function moveMouseToScreen(sc)
-  local pt = geometry.rectMidPoint(sc:fullFrame())
-  mouse.setAbsolutePosition(pt)
+  local pt = hs.geometry.rectMidPoint(sc:fullFrame())
+  hs.mouse.setAbsolutePosition(pt)
 end
 
 local function focusScreen(sc, moveMouse)
@@ -23,10 +25,10 @@ local function focusScreen(sc, moveMouse)
   --front-most application window.
   if not sc then return end
 
-  local windows = fnutils.filter(
-    window.orderedWindows(),
+  local windows = hs.fnutils.filter(
+    hs.window.orderedWindows(),
     fnutils.partial(isInScreen, sc))
-  local windowToFocus = #windows > 0 and windows[1] or window.desktop()
+  local windowToFocus = #windows > 0 and windows[1] or hs.window.desktop()
   windowToFocus:focus()
 
   if moveMouse then moveMouseToScreen(sc) end
@@ -34,11 +36,11 @@ end
 
 --Bring focus to next display/screen
 hs.hotkey.bind(hyper, screen_switch_key, function ()
-    local focused = window.focusedWindow()
+    local focused = hs.window.focusedWindow()
     if not focused then return end
     local sc = focused:screen()
     if not sc then return end
-    focusScreen(window.focusedWindow():screen():next(), true)
+    focusScreen(hs.window.focusedWindow():screen():next(), true)
   end)
 
 -- END DISPLAY FOCUS SWITCHING -- }}}
@@ -48,11 +50,12 @@ local lastNumberOfScreens = #hs.screen.allScreens()
 
 -- Define monitor names for layout purposes
 local display_primary = "Color LCD"
-local display_monitor = "Thunderbolt Display"
+local display_monitor = "DELL U2715H"
 
 -- Define window layouts
 -- Format reminder:
 -- {"App name", "Window name", "Display Name", "unitrect", "framerect", "fullframerect"},
+hs.application.enableSpotlightForNameSearches(true)
 local iTunesMiniPlayerLayout = {"iTunes", "MiniPlayer", display_primary, nil, nil, hs.geometry.rect(0, -48, 400, 48)}
 local internal_display = {
   {"iTerm2", nil, display_primary, hs.layout.maximized, nil, nil},
@@ -72,11 +75,10 @@ local internal_display = {
 
 local dual_display = {
   {"iTerm2", nil, display_monitor, hs.layout.maximized, nil, nil},
-  {"Safari", nil, display_primary, hs.layout.right50, nil, nil},
-  {"Google Chrome", nil, display_primary, hs.layout.right50, nil, nil},
+  {"Google Chrome", nil, display_primary, hs.layout.left50, nil, nil},
   {"OmniFocus", "HP", display_monitor, hs.geometry.unitrect(3/8, 0, 3/8, 0.5), nil, nil},
-  {"OmniFocus", "Forecast", display_monitor, hs.geometry.unitrect(3/8, 0.5, 3/8, 0.5), nil, nil},
   {"Mail", nil, display_primary, hs.geometry.unitrect(0, 0.5, 0.5, 0.5), nil, nil},
+  {"PyCharm", nil, display_monitor, hs.layout.right50, nil, nil},
 }
 
 -- Hotkeys to trigger defined layouts
